@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Product Detail Page</title>
+  <style>
+    :root{
+      --accent:#0f766e; /* teal */
+      --muted:#6b7280;
+      --bg:#f8fafc;
+      --card:#ffffff;
+      --radius:12px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    *{box-sizing: border-box}
+    body{margin:0;background:var(--bg);color:#111827;line-height:1.45}
+
+    .container{max-width:1100px;margin:36px auto;padding:20px}
+
+    /* Page card */
+    .card{background:var(--card);border-radius:var(--radius);padding:22px;box-shadow:0 6px 20px rgba(16,24,40,0.06)}
+
+    /* Layout: gallery on left, details on right */
+    .layout{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start}
+
+    /* Gallery */
+    .gallery{display:flex;gap:16px}
+    .main-img{flex:1;border-radius:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#f3f4f6}
+    .main-img img{max-width:100%;height:auto;display:block}
+    .thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+    .thumb{cursor:pointer;border-radius:8px;overflow:hidden;border:2px solid transparent}
+    .thumb img{display:block;width:100%;height:100%;object-fit:cover}
+    .thumb.active{border-color:var(--accent)}
+
+    /* Product meta */
+    h1{font-size:22px;margin:0 0 6px}
+    .brand{font-size:13px;color:var(--muted);margin-bottom:6px}
+    .price{font-size:20px;color:var(--accent);font-weight:700;margin-top:8px}
+    .old-price{font-size:14px;color:var(--muted);text-decoration:line-through;margin-left:10px}
+
+    .rating{display:inline-flex;gap:8px;align-items:center;color:var(--muted);font-size:14px}
+
+    .specs{margin-top:14px}
+    .specs li{font-size:14px;color:var(--muted);margin:6px 0}
+
+    /* Actions */
+    .buy-card{position:sticky;top:24px;background:linear-gradient(180deg,#fff,#fbfffe);padding:18px;border-radius:12px;border:1px solid rgba(15,118,110,0.06)}
+    .qty{display:flex;gap:8px;align-items:center;margin-top:12px}
+    .qty button{width:36px;height:36px;border-radius:8px;border:1px solid #e5e7eb;background:white;cursor:pointer}
+    .qty input{width:56px;text-align:center;padding:8px;border-radius:8px;border:1px solid #e5e7eb}
+    .btn{display:inline-block;padding:12px 16px;border-radius:10px;background:var(--accent);color:white;text-decoration:none;font-weight:600;border:none;cursor:pointer}
+    .secondary{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+
+    /* Tabs */
+    .tabs{margin-top:22px}
+    .tab-buttons{display:flex;gap:8px}
+    .tab-buttons button{padding:8px 12px;border-radius:10px;border:1px solid transparent;background:#f8fafc;cursor:pointer}
+    .tab-buttons button.active{background:white;border-color:#e6e9ea}
+    .tab-content{margin-top:14px;padding:14px;background:#fcfeff;border-radius:10px;border:1px solid #eef2f2}
+
+    /* Responsive */
+    @media (max-width:980px){
+      .layout{grid-template-columns:1fr;}
+      .thumbs{grid-template-columns:repeat(5,1fr)}
+    }
+
+    @media (max-width:520px){
+      .thumbs{grid-template-columns:repeat(4,1fr)}
+      .buy-card{position:static}
+      .container{padding:12px;margin:18px}
+    }
+
+    /* Small helper styles */
+    table.spec-table{width:100%;border-collapse:collapse}
+    table.spec-table td{padding:8px 6px;border-bottom:1px dashed #eef2f2;font-size:14px}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="layout">
+        <!-- Left: Gallery + description -->
+        <div>
+          <div class="gallery">
+            <div style="flex:1">
+              <div class="main-img" id="mainImage">
+                <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=1200&q=60" alt="Product image" />
+              </div>
+              <div class="thumbs" id="thumbs">
+                <div class="thumb active"><img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=500&q=60" data-large="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=1200&q=60" alt="thumb1"></div>
+                <div class="thumb"><img src="https://images.unsplash.com/photo-1526178617883-4d7c7f6d1a7a?auto=format&fit=crop&w=500&q=60" data-large="https://images.unsplash.com/photo-1526178617883-4d7c7f6d1a7a?auto=format&fit=crop&w=1200&q=60" alt="thumb2"></div>
+                <div class="thumb"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=500&q=60" data-large="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=60" alt="thumb3"></div>
+                <div class="thumb"><img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=500&q=60" data-large="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=1200&q=60" alt="thumb4"></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:18px">
+            <div class="brand">Brand: <strong>Acme</strong></div>
+            <h1>UltraComfort Ergonomic Chair — Model X2</h1>
+            <div class="rating">★★★★☆ <span style="margin-left:6px;color:var(--muted)">(234 reviews)</span></div>
+
+            <div class="tabs">
+              <div class="tab-buttons" role="tablist">
+                <button class="active" data-tab="desc">Description</button>
+                <button data-tab="specs">Specifications</button>
+                <button data-tab="reviews">Reviews</button>
+              </div>
+              <div class="tab-content" id="tabContent">
+                <div id="desc">
+                  <p>The UltraComfort X2 is designed for long hours of work with lumbar support, breathable mesh, and adjustable armrests. Ideal for developers, designers, and anyone who sits all day.</p>
+                  <ul class="specs">
+                    <li>Breathable mesh back</li>
+                    <li>Max load: 150kg</li>
+                    <li>5-year limited warranty</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: Buy card -->
+        <aside>
+          <div class="buy-card">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <div class="price">$199 <span class="old-price">$249</span></div>
+                <div style="font-size:13px;color:var(--muted);margin-top:6px">Free shipping • 2–4 business days</div>
+              </div>
+              <div style="width:64px;height:64px;border-radius:8px;overflow:hidden;background:#f3f4f6;display:flex;align-items:center;justify-content:center">
+                <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=400&q=60" alt="small" style="width:100%;height:auto;display:block">
+              </div>
+            </div>
+
+            <div class="qty">
+              <label style="font-size:13px;color:var(--muted)">Quantity</label>
+              <div style="margin-left:auto;display:flex;align-items:center">
+                <button id="dec">-</button>
+                <input id="qty" type="number" value="1" min="1">
+                <button id="inc">+</button>
+              </div>
+            </div>
+
+            <div style="margin-top:14px;display:flex;gap:8px">
+              <button class="btn" id="addToCart">Add to cart</button>
+              <button class="btn secondary">Wishlist</button>
+            </div>
+
+            <div style="margin-top:14px;font-size:13px;color:var(--muted)">
+              <strong>Returns:</strong> 30-day easy returns.
+            </div>
+
+            <div style="margin-top:12px">
+              <table class="spec-table">
+                <tr><td>Material</td><td style="text-align:right">Mesh / Aluminum</td></tr>
+                <tr><td>Weight</td><td style="text-align:right">12.3 kg</td></tr>
+                <tr><td>Warranty</td><td style="text-align:right">5 years</td></tr>
+              </table>
+            </div>
+
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Thumbnail click -> swap main image
+    document.querySelectorAll('.thumb').forEach(function(el){
+      el.addEventListener('click', function(){
+        document.querySelectorAll('.thumb').forEach(t=>t.classList.remove('active'));
+        el.classList.add('active');
+        var img = el.querySelector('img');
+        var large = img.getAttribute('data-large') || img.src;
+        document.querySelector('#mainImage img').src = large;
+      });
+    });
+
+    // Tabs
+    document.querySelectorAll('.tab-buttons button').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        document.querySelectorAll('.tab-buttons button').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        var tab = btn.dataset.tab;
+        var content = document.getElementById('tabContent');
+        if(tab==='desc'){
+          content.innerHTML = `\n            <div id="desc">\n              <p>The UltraComfort X2 is designed for long hours of work with lumbar support, breathable mesh, and adjustable armrests. Ideal for developers, designers, and anyone who sits all day.</p>\n              <ul class="specs">\n                <li>Breathable mesh back</li>\n                <li>Max load: 150kg</li>\n                <li>5-year limited warranty</li>\n              </ul>\n            </div>`;
+        } else if(tab==='specs'){
+          content.innerHTML = `\n            <div id="specs">\n              <table class="spec-table">\n                <tr><td>Back type</td><td style=\"text-align:right\">Mesh</td></tr>\n                <tr><td>Armrests</td><td style=\"text-align:right\">Adjustable</td></tr>\n                <tr><td>Seat height</td><td style=\"text-align:right\">45–55 cm</td></tr>\n                <tr><td>Max weight</td><td style=\"text-align:right\">150 kg</td></tr>\n              </table>\n            </div>`;
+        } else if(tab==='reviews'){
+          content.innerHTML = `\n            <div id="reviews">\n              <p style=\"margin:0 0 8px\"><strong>Jane D.</strong> — Great chair, comfy and supportive.</p>\n              <p style=\"margin:0 0 8px\"><strong>Mark R.</strong> — Easy to assemble. Good value.</p>\n            </div>`;
+        }
+      });
+    });
+
+    // Quantity controls
+    var qty = document.getElementById('qty');
+    document.getElementById('inc').addEventListener('click', function(){ qty.value = parseInt(qty.value||1)+1 });
+    document.getElementById('dec').addEventListener('click', function(){ if(parseInt(qty.value || 1)>1) qty.value = parseInt(qty.value)-1 });
+
+    document.getElementById('addToCart').addEventListener('click', function(){
+      alert('Added '+qty.value+' item(s) to cart — demo only');
+    });
+  </script>
+</body>
+</html>
